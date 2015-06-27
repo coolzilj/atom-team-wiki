@@ -1,0 +1,18 @@
+{
+  "name": "atom-team-wiki",
+  "main": "./lib/atom-team-wiki",
+  "version": "0.0.0",
+  "description": "Browse your team wiki in Atom",
+  "keywords": [
+  ],
+  "activationCommands": {
+    "atom-workspace": "atom-team-wiki:show"
+  },
+  "repository": "https://github.com/coolzilj/atom-team-wiki",
+  "license": "MIT",
+  "engines": {
+    "atom": ">=1.0.0 <2.0.0"
+  },
+  "dependencies": {
+  }
+}

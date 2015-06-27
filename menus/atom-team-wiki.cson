@@ -1,0 +1,22 @@
+# See https://atom.io/docs/latest/hacking-atom-package-word-count#menus for more details
+'context-menu':
+  'atom-text-editor': [
+    {
+      'label': 'Show atom-team-wiki'
+      'command': 'atom-team-wiki:show'
+    }
+  ]
+'menu': [
+  {
+    'label': 'Packages'
+    'submenu': [
+      'label': 'atom-team-wiki'
+      'submenu': [
+        {
+          'label': 'Show'
+          'command': 'atom-team-wiki:show'
+        }
+      ]
+    ]
+  }
+]
