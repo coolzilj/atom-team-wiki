@@ -1,33 +1,35 @@
-AtomTeamWikiView = require './atom-team-wiki-view'
 {CompositeDisposable} = require 'atom'
 
+AtomTeamWikiView = null
+AtomTeamWikiUri = 'atom://atom-team-wiki/atom-team-wiki'
+
+createAtomTeamWikiView = (state) ->
+  AtomTeamWikiView ?= require './atom-team-wiki-view'
+  new AtomTeamWikiView(state)
+
+atom.deserializers.add
+  name: 'AtomTeamWikiView'
+  deserialize: (state) -> createAtomTeamWikiView(state)
+
 module.exports = AtomTeamWiki =
-  atomTeamWikiView: null
-  modalPanel: null
-  subscriptions: null
+  config:
+    showOnStartup:
+      type: 'boolean'
+      default: true
 
-  activate: (state) ->
-    @atomTeamWikiView = new AtomTeamWikiView(state.atomTeamWikiViewState)
-    @modalPanel = atom.workspace.addModalPanel(item: @atomTeamWikiView.getElement(), visible: false)
-
-    # Events subscribed to in atom's system can be easily cleaned up with a CompositeDisposable
+  activate: ->
     @subscriptions = new CompositeDisposable
 
-    # Register command that toggles this view
-    @subscriptions.add atom.commands.add 'atom-workspace', 'atom-team-wiki:toggle': => @toggle()
+    process.nextTick =>
+      @subscriptions.add atom.workspace.addOpener (filePath) ->
+        createAtomTeamWikiView(uri: AtomTeamWikiUri) if filePath is AtomTeamWikiUri
+      @subscriptions.add atom.commands.add 'atom-workspace', 'atom-team-wiki:show', => @show()
+      if atom.config.get('atom-team-wiki.showOnStartup')
+        @show()
+        atom.config.set('atom-team-wiki.showOnStartup', false)
+
+  show: ->
+    atom.workspace.open(AtomTeamWikiUri)
 
   deactivate: ->
-    @modalPanel.destroy()
     @subscriptions.dispose()
-    @atomTeamWikiView.destroy()
-
-  serialize: ->
-    atomTeamWikiViewState: @atomTeamWikiView.serialize()
-
-  toggle: ->
-    console.log 'AtomTeamWiki was toggled!'
-
-    if @modalPanel.isVisible()
-      @modalPanel.hide()
-    else
-      @modalPanel.show()

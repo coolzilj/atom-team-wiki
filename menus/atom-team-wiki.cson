@@ -10,7 +10,7 @@
   {
     'label': 'Packages'
     'submenu': [
-      'label': 'atom-team-wiki'
+      'label': 'Atom Team Wiki'
       'submenu': [
         {
           'label': 'Show'
